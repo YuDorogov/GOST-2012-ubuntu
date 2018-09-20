@@ -22,9 +22,14 @@ ADD https://raw.githubusercontent.com/fullincome/scripts/master/nginx-gost/insta
 
 RUN chmod +x install-certs.sh
 
+RUN /opt/cprocsp/sbin/amd64/cpconfig -hardware rndm -add cpsd -name 'cpsd rng' -level 3
+RUN /opt/cprocsp/sbin/amd64/cpconfig -hardware rndm -configure cpsd -add string /db1/kis_1 /var/opt/cprocsp/dsrf/db1/kis_1
+RUN /opt/cprocsp/sbin/amd64/cpconfig -hardware rndm -configure cpsd -add string /db2/kis_1 /var/opt/cprocsp/dsrf/db2/kis_1
+RUN mkdir -p /tmp/db1/kis_1 && cp /tmp/db1/kis_1 /var/opt/cprocsp/dsrf/db1/kis_1
+RUN mkdir -p /tmp/db2/kis_1 && cp /tmp/db2/kis_1 /var/opt/cprocsp/dsrf/db2/kis_1
+
 RUN ./install-certs.sh
 
 EXPOSE 80 443
 
 CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
-
